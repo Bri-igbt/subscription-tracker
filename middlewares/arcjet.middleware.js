@@ -27,7 +27,6 @@ const arcjetMiddleware = async (req, res, next) => {
 
     next();
 
-
     } catch (error) {
         res.status(500).json(` Arcjet Middleware Error: ${error.message}`);
         next(error);

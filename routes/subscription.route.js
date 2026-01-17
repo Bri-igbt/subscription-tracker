@@ -1,38 +1,27 @@
 import { Router } from 'express';
+import { 
+    cancelSubscriptionById, 
+    createSubscription, 
+    deleteSubscriptionById, 
+    getAllSubscriptions, 
+    getSubscriptionById, 
+    getUpcomingRenewals, 
+    getUserSubscriptions, 
+    renewSubscriptionById, 
+    updateSubscriptionById 
+} from '../controllers/subscription.controller.js';
+import authMiddleware from '../middlewares/auth.middlewares.js';
 
 const subscriptionRouter = Router();
 
-subscriptionRouter.get('/', (req, res) => {
-    res.send({ message: 'Get all subscriptions'});
-});
-
-subscriptionRouter.get('/:id', (req, res) => {
-    res.send({ message: 'Get subscription details' });
-});
-
-subscriptionRouter.post('/', (req, res) => {
-    res.send({ message: 'Create a new subscription' });
-});
-
-subscriptionRouter.put('/:id', (req, res) => {
-    res.send({ message: 'Update subscription details' });
-});
-
-subscriptionRouter.delete('/:id', (req, res) => {
-    res.send({ message: 'Delete a subscription' });
-})
-
-subscriptionRouter.get('/user/:id', (req, res) => {
-    res.send({ message: 'Get subscriptions for a specific user' });
-});
-
-subscriptionRouter.put('/:id/cancel', (req, res) => {
-    res.send({ message: 'Cancel a subscription' });
-});
-
-subscriptionRouter.get('/upcoming-renewals', (req, res) => {
-    res.send({ message: 'Get upcoming renewals' });
-});
-
+subscriptionRouter.get('/', authMiddleware, getAllSubscriptions);
+subscriptionRouter.get('/:id', authMiddleware, getSubscriptionById);
+subscriptionRouter.post('/', authMiddleware, createSubscription)
+subscriptionRouter.put('/:id', authMiddleware, updateSubscriptionById);
+subscriptionRouter.delete('/:id', authMiddleware, deleteSubscriptionById);
+subscriptionRouter.get('/user/:id', authMiddleware, getUserSubscriptions);
+subscriptionRouter.put('/:id/cancel', authMiddleware, cancelSubscriptionById);
+subscriptionRouter.get('/upcoming-renewals', authMiddleware, getUpcomingRenewals);
+subscriptionRouter.patch("/renew/:id", authMiddleware, renewSubscriptionById);
 
 export default subscriptionRouter;
